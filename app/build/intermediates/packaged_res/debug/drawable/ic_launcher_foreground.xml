@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Background circle (clock face) -->
+    <path
+        android:fillColor="#37474F"
+        android:pathData="M54,54m-40,0a40,40 0,1 1,80 0a40,40 0,1 1,-80 0"/>
+    
+    <!-- Clock face -->
+    <path
+        android:fillColor="#ECEFF1"
+        android:pathData="M54,54m-35,0a35,35 0,1 1,70 0a35,35 0,1 1,-70 0"/>
+    
+    <!-- Clock tick marks -->
+    <path
+        android:strokeColor="#37474F"
+        android:strokeWidth="2"
+        android:pathData="M54,22 L54,26"/>
+    <path
+        android:strokeColor="#37474F"
+        android:strokeWidth="2"
+        android:pathData="M54,82 L54,86"/>
+    <path
+        android:strokeColor="#37474F"
+        android:strokeWidth="2"
+        android:pathData="M22,54 L26,54"/>
+    <path
+        android:strokeColor="#37474F"
+        android:strokeWidth="2"
+        android:pathData="M82,54 L86,54"/>
+    
+    <!-- Clock hour hand -->
+    <path
+        android:strokeColor="#37474F"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M54,54 L54,38"/>
+    
+    <!-- Clock minute hand -->
+    <path
+        android:strokeColor="#37474F"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M54,54 L66,54"/>
+    
+    <!-- Clock center dot -->
+    <path
+        android:fillColor="#D32F2F"
+        android:pathData="M54,54m-3,0a3,3 0,1 1,6 0a3,3 0,1 1,-6 0"/>
+    
+    <!-- Microphone body (classic ball mic style) -->
+    <path
+        android:fillColor="#455A64"
+        android:pathData="M54,45m-12,0a12,14 0,1 1,24 0a12,14 0,1 1,-24 0"/>
+    
+    <!-- Microphone grill lines -->
+    <path
+        android:strokeColor="#78909C"
+        android:strokeWidth="1.5"
+        android:pathData="M42,40 Q54,35 66,40"/>
+    <path
+        android:strokeColor="#78909C"
+        android:strokeWidth="1.5"
+        android:pathData="M42,45 Q54,40 66,45"/>
+    <path
+        android:strokeColor="#78909C"
+        android:strokeWidth="1.5"
+        android:pathData="M42,50 Q54,45 66,50"/>
+    
+    <!-- Microphone stand -->
+    <path
+        android:fillColor="#455A64"
+        android:pathData="M51,59 L57,59 L57,68 L54,72 L51,68 Z"/>
+    
+    <!-- Microphone base -->
+    <path
+        android:fillColor="#37474F"
+        android:pathData="M47,72 L61,72 L61,75 L47,75 Z"/>
+    
+</vector>
