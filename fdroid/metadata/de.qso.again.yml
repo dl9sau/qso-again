@@ -31,14 +31,14 @@ RepoType: git
 Repo: https://github.com/dl9sau/qso-again.git
 
 Builds:
-  - versionName: 1.0.1
-    versionCode: 1000001
-    commit: 1.0.1
+  - versionName: 1.0.2
+    versionCode: 1000002
+    commit: 1.0.2
     subdir: app
     gradle:
       - yes
 
 AutoUpdateMode: Version %v
 UpdateCheckMode: Tags
-CurrentVersion: 1.0.1
-CurrentVersionCode: 1000001
+CurrentVersion: 1.0.2
+CurrentVersionCode: 1000002
