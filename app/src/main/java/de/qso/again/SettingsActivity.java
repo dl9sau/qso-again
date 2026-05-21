@@ -197,6 +197,11 @@ public class SettingsActivity extends AppCompatActivity {
                 langPref.setOnPreferenceChangeListener((preference, newValue) -> {
                     SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(getActivity());
                     p.edit().putString("language", (String) newValue).apply();
+                    androidx.appcompat.app.AppCompatActivity act =
+                            (androidx.appcompat.app.AppCompatActivity) getActivity();
+                    if (act != null) {
+                        act.runOnUiThread(act::recreate);
+                    }
                     return true;
                 });
             }

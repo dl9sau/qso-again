@@ -115,20 +115,23 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
         }
     };
     
+    private String lastAppliedLang;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SettingsActivity.applyLanguageStatic(this);
+        lastAppliedLang = androidx.preference.PreferenceManager
+                .getDefaultSharedPreferences(this)
+                .getString("language", "system");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        
-        if (savedInstanceState == null) {
-            initViews();
-            setupClickListeners();
-            loadSavedRecordings();
-        }
+
+        initViews();
+        setupClickListeners();
+        loadSavedRecordings();
         updatePlaybackUI(false);
         
         List<String> permissions = new ArrayList<>();
@@ -1063,7 +1066,7 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
                 tvRecordingTime.setText(formatDuration(durationMs));
                 setSeekButtonsEnabledForSeconds(durationSeconds);
 
-                handler.postDelayed(this, 200);
+                handler.postDelayed(this, 1000);
             }
         }
     };
@@ -1079,7 +1082,7 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
                     long totalMs = (long) recordingSize * 1000 / recordingSampleRate / bps;
                     tvPlaybackProgress.setText(formatDuration(currentMs) + " / " + formatDuration(totalMs));
                     seekBarPlayback.setProgress((int) ((playbackOffset * 100L) / (long) recordingSize));
-                    handler.postDelayed(this, 200);
+                    handler.postDelayed(this, 1000);
                 }
             }
         }
@@ -1115,6 +1118,13 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
     @Override
     protected void onResume() {
         super.onResume();
+        String currentLang = androidx.preference.PreferenceManager
+                .getDefaultSharedPreferences(this)
+                .getString("language", "system");
+        if (lastAppliedLang != null && !lastAppliedLang.equals(currentLang)) {
+            recreate();
+            return;
+        }
         loadSettings();
     }
     

@@ -4,11 +4,15 @@
         <item>@string/language_system</item>
         <item>@string/language_german</item>
         <item>@string/language_english</item>
+        <item>@string/language_spanish</item>
+        <item>@string/language_french</item>
     </string-array>
     <string-array name="language_values">
         <item>system</item>
         <item>de</item>
         <item>en</item>
+        <item>es</item>
+        <item>fr</item>
     </string-array>
     <string-array name="sample_rate_entries">
         <item>44100 Hz</item>
