@@ -11,7 +11,10 @@ Eine Android-App zur Aufnahme und Wiedergabe von Audio, speziell für Amateurfun
 - **Schneller Rücksprung**: Springe über einen Button oder das Progressbar ein paar Sekunden zurück, um wichtige Passagen erneut zu hören
 
 ## Screenshots
-(Füge hier Screenshots hinzu, z. B. `app/src/main/res/drawable/screenshot1.png`)
+<p>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/01_main.png" alt="Hauptbildschirm" width="300">
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/02_settings.png" alt="Einstellungen" width="300">
+</p>
 
 ## Build-Anweisungen
 1. Klone das Repository:
