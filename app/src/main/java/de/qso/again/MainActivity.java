@@ -139,10 +139,18 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
             permissions.add(Manifest.permission.RECORD_AUDIO);
         }
         
-        // Für Android 10+ (API 29+): READ_EXTERNAL_STORAGE prüfen
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            // Android 9 und aelter: WRITE_EXTERNAL_STORAGE noetig fuer Speichern in Downloads.
+            // WRITE impliziert READ, also reicht ein Request.
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+        } else {
+            // Android 10+ (API 29+): WRITE ist im Manifest nicht mehr deklariert (maxSdkVersion=28),
+            // wir brauchen nur READ_EXTERNAL_STORAGE.
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
         }
         
         if (!permissions.isEmpty()) {
