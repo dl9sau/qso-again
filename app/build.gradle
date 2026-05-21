@@ -2,35 +2,25 @@ plugins {
     id 'com.android.application'
 }
 
-def versionPropsFile = file('version.properties')
-def versionBuild = 0
-if (versionPropsFile.canRead()) {
-    Properties versionProps = new Properties()
-    versionProps.load(new FileInputStream(versionPropsFile))
-    versionBuild = (versionProps['VERSION_BUILD'] ?: '0').toInteger()
-}
-
-// Nur bei lokalen Builds erhöhen (nicht in CI/GitHub Actions)
-def isLocalBuild = !System.getenv('GITHUB_ACTIONS') && !System.getenv('CI')
-def isBuildingApp = gradle.startParameter.taskNames.any { name ->
-    def n = name.toLowerCase()
-    n.contains('assemble') || n.contains('install') || n.contains('bundle') || n == 'build'
-}
-if (isBuildingApp && isLocalBuild) {
-    versionBuild += 1
-    Properties newVersionProps = new Properties()
-    newVersionProps.setProperty('VERSION_BUILD', versionBuild.toString())
-    versionPropsFile.withWriter { w -> newVersionProps.store(w, null) }
-}
-
-// Git-Hash für GitHub/F-Droid
-def gitHash = ''
+// versionName: aus 'git describe --tags --always --dirty'
+//   auf Tag:        1.0.0
+//   zwischen Tags:  1.0.0-3-g3a1b   (3 Commits nach Tag, Kurzhash)
+//   ohne Tag:       3a1b            (nur Hash)
+//   uncommitted:    ...-dirty
+// CI/F-Droid-Builds bekommen Suffix '-CI' fuer klare Unterscheidung.
+def gitDescribe = '0.0.0-unknown'
 try {
-    gitHash = 'git rev-parse --short HEAD'.execute().text.trim()
-} catch (Exception e) {
-    gitHash = 'unknown'
-}
-def versionSuffix = isLocalBuild ? "" : "-GIT-${gitHash}"
+    gitDescribe = 'git describe --tags --always --dirty'.execute().text.trim()
+} catch (Exception ignored) {}
+
+// versionCode: Anzahl aller Commits = strikt monoton, ohne Pflege
+def commitCount = 1
+try {
+    commitCount = ('git rev-list --count HEAD'.execute().text.trim()) as Integer
+} catch (Exception ignored) {}
+
+def isLocalBuild = !System.getenv('GITHUB_ACTIONS') && !System.getenv('CI')
+def versionSuffix = isLocalBuild ? '' : '-CI'
 
 def buildTimestamp = new Date().format("yyyy-MM-dd HH:mm:ss")
 
@@ -42,8 +32,8 @@ android {
         applicationId "de.qso.again"
         minSdk 26
         targetSdk 34
-        versionCode Math.max(1, versionBuild)
-        versionName "1.0.${versionBuild}${versionSuffix}"
+        versionCode commitCount
+        versionName "${gitDescribe}${versionSuffix}"
         buildConfigField "String", "BUILD_TIMESTAMP", "\"${buildTimestamp}\""
     }
 
