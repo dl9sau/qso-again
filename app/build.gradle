@@ -13,11 +13,18 @@ try {
     gitDescribe = 'git describe --tags --always --dirty'.execute().text.trim()
 } catch (Exception ignored) {}
 
-// versionCode: Anzahl aller Commits = strikt monoton, ohne Pflege
-def commitCount = 1
-try {
-    commitCount = ('git rev-list --count HEAD'.execute().text.trim()) as Integer
-} catch (Exception ignored) {}
+// versionCode: deterministisch aus Tag-Name (X.Y.Z -> X*1M + Y*1K + Z).
+// Vorteil: unabhaengig von Clone-Depth (F-Droid shallow-clone-safe) und
+// stimmt deterministisch mit dem YAML-versionCode ueberein.
+// Zwischen Tags greift der letzte erkannte Tag (gitDescribe-Prefix matcht
+// auch "1.0.1-3-gABC").
+def versionCodeFromTag = 1
+def tagMatch = gitDescribe =~ /^v?(\d+)\.(\d+)\.(\d+)/
+if (tagMatch) {
+    versionCodeFromTag = (tagMatch[0][1] as Integer) * 1000000 +
+                         (tagMatch[0][2] as Integer) * 1000 +
+                         (tagMatch[0][3] as Integer)
+}
 
 // Kurz-Hash fuer CI-Suffix
 def shortHash = ''
@@ -38,7 +45,7 @@ android {
         applicationId "de.qso.again"
         minSdk 26
         targetSdk 34
-        versionCode commitCount
+        versionCode versionCodeFromTag
         versionName "${gitDescribe}${versionSuffix}"
         buildConfigField "String", "BUILD_TIMESTAMP", "\"${buildTimestamp}\""
     }
