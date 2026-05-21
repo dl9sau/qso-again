@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory app:title="@string/recording_settings">
+    <PreferenceCategory>
         <ListPreference
             app:key="sample_rate"
             app:title="@string/sample_rate"
@@ -19,14 +19,8 @@
         <Preference
             android:key="memory_usage"
             android:title="@string/memory_usage"
-            android:selectable="false" />
-        <SeekBarPreference
-            app:key="max_duration"
-            app:title="@string/max_duration"
-            app:min="1"
-            android:max="360"
-            app:defaultValue="5"
-            app:showSeekBarValue="true" />
+            android:selectable="false"
+            app:singleLineTitle="false" />
         <ListPreference
             app:key="language"
             app:title="@string/language"
@@ -35,32 +29,32 @@
             app:entryValues="@array/language_values"
             app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
-    <PreferenceCategory app:title="@string/about">
-        <PreferenceCategory app:title="@string/app_name">
-            <Preference
-                android:key="version"
-                android:title="Version"
-                android:summary="1.00" />
-            <Preference
-                android:key="build_date"
-                android:title="@string/build_date"
-                android:summary="2026-04-28" />
-            <Preference
-                android:key="author"
-                android:title="@string/author"
-                android:summary="@string/thomas_osterried_dl9sau" />
-            <Preference
-                android:key="license"
-                android:title="@string/license"
-                android:summary="@string/gpl_v3" />
-            <Preference
-                android:key="copyright"
-                android:title="@string/copyright"
-                android:summary="@string/copyright_2026" />
-            <Preference
-                android:key="created_with"
-                android:title="@string/created_with"
-                android:summary="@string/opencode" />
-        </PreferenceCategory>
+    <PreferenceCategory
+        app:title="@string/about_app"
+        app:layout="@layout/preference_category_left">
+        <Preference
+            android:key="version"
+            android:title="Version"
+            android:summary="1.011" />
+        <Preference
+            android:key="build_date"
+            android:title="@string/build_date"
+            android:summary="2026-04-28" />
+        <Preference
+            android:key="author"
+            android:title="@string/author"
+            android:summary="@string/thomas_osterried_dl9sau" />
+        <Preference
+            android:key="license"
+            android:title="@string/license"
+            android:summary="@string/gpl_v3" />
+        <Preference
+            android:key="copyright"
+            android:title="@string/copyright"
+            android:summary="@string/copyright_2026" />
+        <Preference
+            android:key="created_with"
+            android:title="@string/created_with"
+            android:summary="OpenCode (big-pickle)" />
     </PreferenceCategory>
 </PreferenceScreen>

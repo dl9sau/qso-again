@@ -18,12 +18,13 @@
     <string name="saved_toast">Saved to Downloads</string>
     <string name="playback_started">Playback started</string>
     <string name="permission_required">Microphone permission required</string>
-    <string name="max_duration">Max recording duration (minutes)</string>
+    <string name="max_duration">Max recording duration</string>
     <string name="recording_in_progress">Recording in progress</string>
     <string name="speed">Speed</string>
     <string name="speed_default">default</string>
     <string name="recording_settings">Recording Settings</string>
     <string name="about">About</string>
+    <string name="about_app">About qso-again</string>
     <string name="thomas_osterried_dl9sau">Thomas Osterried, DL9SAU</string>
     <string name="gpl_v3">GPL v3</string>
     <string name="copyright_2026">Copyright 2026 Thomas Osterried, DL9SAU</string>
@@ -49,4 +50,7 @@
     <string name="sample_rate">Sample rate (Hz)</string>
     <string name="bit_depth">Bit depth</string>
     <string name="memory_usage">Memory (RAM)</string>
+    <string name="auto_save">Auto-save when full (max duration or RAM)</string>
+    <string name="audio_memory_consumption">Audio Memory consumption (RAM / File):\n%1$s</string>
+    <string name="seek_beginning">Beginning</string>
 </resources>

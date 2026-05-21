@@ -180,6 +180,16 @@
                 android:gravity="center">
 
                 <Button
+                    android:id="@+id/btn0s"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="0s"
+                    android:backgroundTint="#2196F3"
+                    android:layout_margin="1dp"
+                    android:textSize="10sp" />
+
+                <Button
                     android:id="@+id/btn2s"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
@@ -309,6 +319,16 @@
                     android:layout_weight="1"
                     android:text="60min"
                     android:tag="60m"
+                    android:layout_margin="1dp"
+                    android:textSize="10sp" />
+
+                <Button
+                    android:id="@+id/btnBeginning"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
+                    android:text="@string/seek_beginning"
+                    android:backgroundTint="#2196F3"
                     android:layout_margin="1dp"
                     android:textSize="10sp" />
 

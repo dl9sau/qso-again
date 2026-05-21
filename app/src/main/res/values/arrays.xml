@@ -14,16 +14,20 @@
         <item>44100 Hz</item>
         <item>22050 Hz *</item>
         <item>11025 Hz</item>
+        <item>8000 Hz</item>
     </string-array>
     <string-array name="sample_rate_values">
         <item>44100</item>
         <item>22050</item>
         <item>11025</item>
+        <item>8000</item>
     </string-array>
     <string-array name="bit_depth_entries">
         <item>16-bit *</item>
+        <item>8-bit µ-law</item>
     </string-array>
     <string-array name="bit_depth_values">
         <item>16</item>
+        <item>8</item>
     </string-array>
 </resources>

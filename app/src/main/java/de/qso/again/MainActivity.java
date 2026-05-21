@@ -56,8 +56,9 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
     private ProgressBar progressRecording;
     private SeekBar seekBarPlayback;
     private Button btnPlay, btnStartStop, btnSave;
-    private Button btn2s, btn5s, btn10s, btn20s, btn30s;
+    private Button btn0s, btn2s, btn5s, btn10s, btn20s, btn30s;
     private Button btn1m, btn2m, btn5m, btn10m, btn30m, btn60m;
+    private Button btnBeginning;
     private Button btnSpeedDown, btnSpeedDefault, btnSpeedUp;
     private RecyclerView rvRecordings;
     private RecordingsAdapter recordingsAdapter;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
     private int recordingSampleRate = 22050;
     private int recordingBitDepth = 16;
     private int reactionTimeMs = 5000;
+    private boolean suppressSaveOffset = false;
 
     private final float[] speedLevels = {0.5f, 0.7f, 0.8f, 0.9f, 1.0f, 1.1f, 1.2f, 1.3f, 1.5f};
     private int currentSpeedIndex = 4;
@@ -74,12 +76,14 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
     private AtomicBoolean isPlaying = new AtomicBoolean(false);
     private int playbackOffset = 0;
     private int playbackLength = 0;
+    private int playbackStartOffset = 0;
     private int lastSavedOffset = 0;
     
     private byte[] currentRecording = null;
     private long recordingStartTime = 0;
     private long recordingEndTime = 0;
     private AudioTrack audioTrack = null;
+    private Runnable pendingPlaybackAction = null;
     private Handler handler = new Handler(Looper.getMainLooper());
     
     private final ActivityResultLauncher<String[]> requestPermissionsLauncher =
@@ -171,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
         btnPlay = findViewById(R.id.btnPlay);
         btnStartStop = findViewById(R.id.btnStartStop);
         btnSave = findViewById(R.id.btnSave);
+        btn0s = findViewById(R.id.btn0s);
         btn2s = findViewById(R.id.btn2s);
         btn5s = findViewById(R.id.btn5s);
         btn10s = findViewById(R.id.btn10s);
@@ -182,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
         btn10m = findViewById(R.id.btn10m);
         btn30m = findViewById(R.id.btn30m);
         btn60m = findViewById(R.id.btn60m);
+        btnBeginning = findViewById(R.id.btnBeginning);
         btnSpeedDown = findViewById(R.id.btnSpeedDown);
         btnSpeedDefault = findViewById(R.id.btnSpeedDefault);
         btnSpeedUp = findViewById(R.id.btnSpeedUp);
@@ -190,15 +196,19 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
     
     private void setupClickListeners() {
         View.OnClickListener seekBackListener = v -> {
-            if (recorderService != null && recorderService.isRecording()) stopRecording();
-            if (isPlaying.get()) {
-                stopPlayback();
-            }
             String tag = v.getTag() != null ? v.getTag().toString() : "";
-            if (!tag.isEmpty()) {
-                int seconds = parseDuration(tag);
+            if (tag.isEmpty()) return;
+            int seconds = parseDuration(tag);
+            Runnable action = () -> {
                 seekBackFromEnd(seconds);
                 btnPlay.setText(R.string.stop_playback);
+            };
+            if (recorderService != null && recorderService.isRecording()) {
+                pendingPlaybackAction = action;
+                stopRecording();
+            } else {
+                if (isPlaying.get()) stopPlayback();
+                action.run();
             }
         };
         
@@ -214,27 +224,44 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
         btn30m.setOnClickListener(seekBackListener);
         btn60m.setOnClickListener(seekBackListener);
         
+        View.OnClickListener seekToEndpointListener = v -> {
+            final boolean toBeginning = (v.getId() == R.id.btnBeginning);
+            Runnable action = () -> seekToEndpoint(toBeginning);
+            if (recorderService != null && recorderService.isRecording()) {
+                pendingPlaybackAction = action;
+                stopRecording();
+            } else {
+                if (isPlaying.get()) stopPlayback();
+                action.run();
+            }
+        };
+        btn0s.setOnClickListener(seekToEndpointListener);
+        btnBeginning.setOnClickListener(seekToEndpointListener);
+
         btnStartStop.setOnClickListener(v -> toggleRecording());
         btnPlay.setOnClickListener(v -> {
-            if (recorderService != null && recorderService.isRecording()) stopRecording();
-            if (isPlaying.get()) {
-                stopPlayback();
-                btnPlay.setText(R.string.play);
-            } else {
+            Runnable startPlayback = () -> {
                 int recordingSize = (currentRecording != null) ? currentRecording.length : 0;
                 if (recordingSize > 0) {
                     int startPos = playbackOffset;
                     if (startPos < 0 || startPos >= recordingSize - 1000) {
                         startPos = 0;
                         playbackOffset = 0;
-                    } else {
-		    	playbackOffset = startPos;
-		    }
+                    }
                     playFromOffset(startPos, recordingSize - startPos);
                     btnPlay.setText(R.string.stop_playback);
                 } else {
                     Toast.makeText(this, R.string.no_recording, Toast.LENGTH_SHORT).show();
                 }
+            };
+            if (recorderService != null && recorderService.isRecording()) {
+                pendingPlaybackAction = startPlayback;
+                stopRecording();
+            } else if (isPlaying.get()) {
+                stopPlayback();
+                btnPlay.setText(R.string.play);
+            } else {
+                startPlayback.run();
             }
         });
         btnSave.setOnClickListener(v -> {
@@ -249,20 +276,24 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
                 return;
             }
             
+            int alignMask = (recordingBitDepth == 8) ? ~0 : ~1;
             if (isPlaying.get()) {
-                int currentPos = playbackOffset;
                 int bytesBack = reactionTimeMs * recordingSampleRate * bytesPerSample() / 1000;
-                int newOffset = Math.max(0, currentPos - bytesBack);
-                int alignMask = (recordingBitDepth == 8) ? ~0 : ~1;
-                newOffset = newOffset & alignMask;
+                int newOffset = Math.max(0, playbackOffset - bytesBack) & alignMask;
                 saveWithOffset(newOffset);
             } else {
                 int recordingSize = (currentRecording != null) ? currentRecording.length : 0;
                 int saveFrom;
-                if (playbackOffset > 0 && playbackOffset < recordingSize) {
+                if (recordingSize > 0 && playbackOffset >= recordingSize - 1000) {
+                    saveFrom = playbackStartOffset;
+                } else if (playbackOffset > 0 && playbackOffset < recordingSize) {
                     saveFrom = playbackOffset;
                 } else {
                     saveFrom = lastSavedOffset;
+                }
+                if (!suppressSaveOffset) {
+                    int bytesBack = reactionTimeMs * recordingSampleRate * bytesPerSample() / 1000;
+                    saveFrom = Math.max(0, saveFrom - bytesBack) & alignMask;
                 }
                 saveWithOffset(saveFrom);
             }
@@ -284,6 +315,7 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
                         long newOffset = Math.min(recordingSize - 1, (recordingSize * progress) / 100);
                         newOffset = newOffset & alignMask;
                         playbackOffset = (int) newOffset;
+                        suppressSaveOffset = false;
                         long offsetMs = newOffset * 1000 / sampleRate / bps;
                         long totalMs = recordingSize * 1000 / sampleRate / bps;
                         tvPlaybackProgress.setText(formatDuration(offsetMs) + " / " + formatDuration(totalMs));
@@ -355,7 +387,10 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
         boolean ramLimited = configMin > ramMaxMin;
         long displayMin = ramLimited ? ramMaxMin : configMin;
         String tilde = ramLimited ? "~" : "";
-        tvStatus.setText(getString(recordingStateRes) + " (loop max " + tilde + displayMin + " min)");
+
+	String sLoopTime = " (loop max " + tilde + SettingsActivity.formatDuration((int) displayMin) + ")";
+
+        tvStatus.setText(getString(recordingStateRes) + sLoopTime);
     }
 
     
@@ -408,11 +443,14 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
     }
 
     private void updatePlaybackUI(boolean hasRecording) {
+        boolean recording = recorderService != null && recorderService.isRecording();
         btnSpeedDown.setEnabled(hasRecording);
         btnSpeedDefault.setEnabled(hasRecording);
         btnSpeedUp.setEnabled(hasRecording);
         seekBarPlayback.setEnabled(hasRecording);
-        btnSave.setEnabled(hasRecording);
+        btnSave.setEnabled(hasRecording || recording);
+        btn0s.setEnabled(hasRecording);
+        btnBeginning.setEnabled(hasRecording);
 
         if (hasRecording) {
             updateButtonStates();
@@ -477,6 +515,8 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
             recordingStartTime = parseFilenameTimestamp(filename);
             playbackOffset = 0;
             lastSavedOffset = 0;
+            playbackStartOffset = 0;
+            suppressSaveOffset = false;
             
             handler.post(() -> {
                 Toast.makeText(this, "Loaded: " + file.getName(), Toast.LENGTH_SHORT).show();
@@ -726,6 +766,26 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
         }
     }
 
+    private void seekToEndpoint(boolean toBeginning) {
+        if (currentRecording == null) {
+            Toast.makeText(this, R.string.no_recording, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        int totalBytes = currentRecording.length;
+        int alignMask = (recordingBitDepth == 8) ? ~0 : ~1;
+        int newOffset = (toBeginning ? 0 : totalBytes) & alignMask;
+        playbackOffset = newOffset;
+        playbackLength = totalBytes - newOffset;
+        lastSavedOffset = newOffset;
+        playbackStartOffset = 0;
+        suppressSaveOffset = true;
+        if (totalBytes > 0) {
+            seekBarPlayback.setProgress((int)((newOffset * 100L) / totalBytes));
+        }
+        updatePlaybackProgressDisplay();
+        btnPlay.setText(R.string.play);
+    }
+
     private void seekBackFromEnd(int seconds) {
         boolean hasRecording = (currentRecording != null);
         if (!hasRecording) {
@@ -750,7 +810,8 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
         playbackOffset = newOffset;
         playbackLength = totalBytes - newOffset;
         lastSavedOffset = newOffset;
-        
+        suppressSaveOffset = false;
+
         seekBarPlayback.setProgress((int)((newOffset * 100) / totalBytes));
         updatePlaybackProgressDisplay();
         
@@ -762,6 +823,11 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
         currentSpeedIndex = clamped;
         playbackSpeed = speedLevels[clamped];
         tvPlaybackSpeed.setText(String.format(Locale.getDefault(), "%.1fx", playbackSpeed));
+        AudioTrack track = audioTrack;
+        if (track != null && isPlaying.get()) {
+            int newRate = Math.max(4000, (int)(recordingSampleRate * playbackSpeed));
+            try { track.setPlaybackRate(newRate); } catch (Exception ignore) {}
+        }
     }
 
     private int parseDuration(String tag) {
@@ -780,6 +846,7 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
         int alignMask = (recordingBitDepth == 8) ? ~0 : ~1;
         offset = offset & alignMask;
         playbackOffset = offset;
+        playbackStartOffset = offset;
         playbackLength = length > 0 ? length : recordingSize - offset;
 
         if (offset == 0) lastSavedOffset = 0;
@@ -1017,6 +1084,8 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
         recordingStartTime = startTimeMs;
         playbackOffset = 0;
         lastSavedOffset = 0;
+        playbackStartOffset = 0;
+        suppressSaveOffset = false;
 
         final boolean hasBuffer = audioData != null && audioData.length > 0;
         handler.post(() -> {
@@ -1029,6 +1098,9 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
                     "Recording too large for memory — saved to Downloads",
                     Toast.LENGTH_LONG).show();
             }
+            Runnable pending = pendingPlaybackAction;
+            pendingPlaybackAction = null;
+            if (pending != null && hasBuffer) pending.run();
         });
     }
     

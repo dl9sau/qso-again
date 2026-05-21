@@ -2,6 +2,27 @@ plugins {
     id 'com.android.application'
 }
 
+def versionPropsFile = file('version.properties')
+def versionBuild = 0
+if (versionPropsFile.canRead()) {
+    Properties versionProps = new Properties()
+    versionProps.load(new FileInputStream(versionPropsFile))
+    versionBuild = (versionProps['VERSION_BUILD'] ?: '0').toInteger()
+}
+
+def isBuildingApp = gradle.startParameter.taskNames.any { name ->
+    def n = name.toLowerCase()
+    n.contains('assemble') || n.contains('install') || n.contains('bundle') || n == 'build'
+}
+if (isBuildingApp) {
+    versionBuild += 1
+    Properties newVersionProps = new Properties()
+    newVersionProps.setProperty('VERSION_BUILD', versionBuild.toString())
+    versionPropsFile.withWriter { w -> newVersionProps.store(w, null) }
+}
+
+def buildTimestamp = new Date().format("yyyy-MM-dd HH:mm:ss")
+
 android {
     namespace 'de.qso.again'
     compileSdk 34
@@ -10,8 +31,13 @@ android {
         applicationId "de.qso.again"
         minSdk 26
         targetSdk 34
-        versionCode 1
-        versionName "1.00"
+        versionCode Math.max(1, versionBuild)
+        versionName "1.0.${versionBuild}"
+        buildConfigField "String", "BUILD_TIMESTAMP", "\"${buildTimestamp}\""
+    }
+
+    buildFeatures {
+        buildConfig true
     }
 
     buildTypes {

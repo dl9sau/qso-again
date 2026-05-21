@@ -31,6 +31,13 @@ public class SettingsActivity extends AppCompatActivity {
         return Math.max(1, (int) (usableBytes / bytesPerSecond / 60));
     }
 
+    static String formatDuration(int min) {
+        if (min >= 60) {
+            return String.format(Locale.getDefault(), "%dh %02dmin", min / 60, min % 60);
+        }
+        return String.format(Locale.getDefault(), "%dmin", min);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -57,7 +64,7 @@ public class SettingsActivity extends AppCompatActivity {
         Runnable updateDurationDisplay = () -> {
             int value = Integer.parseInt(prefs2.getString("max_duration", "5"));
             int maxByRam = currentMaxMinutesByRam(prefs2);
-            tvDuration.setText(value + " / " + maxByRam + " min");
+            tvDuration.setText(formatDuration(value) + " / " + formatDuration(maxByRam));
         };
         updateDurationDisplay.run();
 
@@ -84,7 +91,8 @@ public class SettingsActivity extends AppCompatActivity {
         View.OnLongClickListener accelListener = v -> {
             int current = Integer.parseInt(prefs2.getString("max_duration", "5"));
             int max = currentMaxMinutesByRam(prefs2);
-            int step = v.getId() == R.id.btnDurationMinus ? -10 : 10;
+            int magnitude = current > 60 ? 20 : 10;
+            int step = v.getId() == R.id.btnDurationMinus ? -magnitude : magnitude;
             int newValue = Math.max(1, Math.min(max, current + step));
             prefs2.edit().putString("max_duration", String.valueOf(newValue)).apply();
             updateDurationDisplay.run();
@@ -240,7 +248,7 @@ public class SettingsActivity extends AppCompatActivity {
             long bytesPerDuration = bytesPerSecond * maxDuration * 60;
             double mbPerDuration = bytesPerDuration / (1024.0 * 1024.0);
             String summary = String.format(Locale.getDefault(), "%.1f MB", mbPerDuration);
-            memPref.setTitle("Audio Memory consumption (RAM / File): " + summary);
+            memPref.setTitle(getString(R.string.audio_memory_consumption, summary));
         }
 
         @Override
