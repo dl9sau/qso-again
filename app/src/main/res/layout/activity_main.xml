@@ -51,37 +51,40 @@
                 android:gravity="center"
                 android:layout_marginBottom="4dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:orientation="horizontal"
+                 android:gravity="center">
 
-                <Button
-                    android:id="@+id/btnStartStop"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/record"
-                    android:layout_margin="2dp" />
+                 <Button
+                     android:id="@+id/btnStartStop"
+                     android:layout_width="0dp"
+                     android:layout_height="wrap_content"
+                     android:layout_weight="1"
+                     android:text="@string/record"
+                     android:contentDescription="@string/desc_start_stop_recording"
+                     android:layout_margin="2dp" />
 
-                <Button
-                    android:id="@+id/btnPlay"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/play"
-                    android:layout_margin="2dp" />
+                 <Button
+                     android:id="@+id/btnPlay"
+                     android:layout_width="0dp"
+                     android:layout_height="wrap_content"
+                     android:layout_weight="1"
+                     android:text="@string/play"
+                     android:contentDescription="@string/desc_play_recording"
+                     android:layout_margin="2dp" />
 
-                <Button
-                    android:id="@+id/btnSave"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/save"
-                    android:layout_margin="2dp" />
+                 <Button
+                     android:id="@+id/btnSave"
+                     android:layout_width="0dp"
+                     android:layout_height="wrap_content"
+                     android:layout_weight="1"
+                     android:text="@string/save"
+                     android:contentDescription="@string/desc_save_recording"
+                     android:layout_margin="2dp" />
 
-            </LinearLayout>
+             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -98,38 +101,41 @@
                 android:textSize="12sp"
                 android:layout_marginBottom="4dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginBottom="4dp">
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:orientation="horizontal"
+                 android:gravity="center"
+                 android:layout_marginBottom="4dp">
 
-                <Button
-                    android:id="@+id/btnSpeedDown"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="-"
-                    android:layout_margin="2dp" />
+                 <Button
+                     android:id="@+id/btnSpeedDown"
+                     android:layout_width="0dp"
+                     android:layout_height="40dp"
+                     android:layout_weight="1"
+                     android:text="-"
+                     android:contentDescription="@string/desc_decrease_playback_speed"
+                     android:layout_margin="2dp" />
 
-                <Button
-                    android:id="@+id/btnSpeedDefault"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="@string/speed_default"
-                    android:layout_margin="2dp" />
+                 <Button
+                     android:id="@+id/btnSpeedDefault"
+                     android:layout_width="0dp"
+                     android:layout_height="40dp"
+                     android:layout_weight="1"
+                     android:text="@string/speed_default"
+                     android:contentDescription="@string/desc_reset_playback_speed"
+                     android:layout_margin="2dp" />
 
-                <Button
-                    android:id="@+id/btnSpeedUp"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="+"
-                    android:layout_margin="2dp" />
+                 <Button
+                     android:id="@+id/btnSpeedUp"
+                     android:layout_width="0dp"
+                     android:layout_height="40dp"
+                     android:layout_weight="1"
+                     android:text="+"
+                     android:contentDescription="@string/desc_increase_playback_speed"
+                     android:layout_margin="2dp" />
 
-            </LinearLayout>
+             </LinearLayout>
 
             <TextView
                 android:id="@+id/tvPlaybackSpeed"
@@ -179,64 +185,70 @@
                 android:orientation="horizontal"
                 android:gravity="center">
 
-                <Button
-                    android:id="@+id/btn0s"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="0s"
-                    android:backgroundTint="#2196F3"
-                    android:layout_margin="1dp"
-                    android:textSize="10sp" />
+                 <Button
+                     android:id="@+id/btn0s"
+                     android:layout_width="0dp"
+                     android:layout_height="40dp"
+                     android:layout_weight="1"
+                     android:text="0s"
+                     android:contentDescription="@string/desc_seek_back_0s"
+                     android:backgroundTint="#2196F3"
+                     android:layout_margin="1dp"
+                     android:textSize="10sp" />
 
-                <Button
-                    android:id="@+id/btn2s"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="2s"
-                    android:tag="2s"
-                    android:layout_margin="1dp"
-                    android:textSize="10sp" />
+                 <Button
+                     android:id="@+id/btn2s"
+                     android:layout_width="0dp"
+                     android:layout_height="40dp"
+                     android:layout_weight="1"
+                     android:text="2s"
+                     android:contentDescription="@string/desc_seek_back_2s"
+                     android:tag="2s"
+                     android:layout_margin="1dp"
+                     android:textSize="10sp" />
 
-                <Button
-                    android:id="@+id/btn5s"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="5s"
-                    android:tag="5s"
-                    android:layout_margin="1dp"
-                    android:textSize="10sp" />
+                 <Button
+                     android:id="@+id/btn5s"
+                     android:layout_width="0dp"
+                     android:layout_height="40dp"
+                     android:layout_weight="1"
+                     android:text="5s"
+                     android:contentDescription="@string/desc_seek_back_5s"
+                     android:tag="5s"
+                     android:layout_margin="1dp"
+                     android:textSize="10sp" />
 
-                <Button
-                    android:id="@+id/btn10s"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="10s"
-                    android:tag="10s"
-                    android:layout_margin="1dp"
-                    android:textSize="10sp" />
+                 <Button
+                     android:id="@+id/btn10s"
+                     android:layout_width="0dp"
+                     android:layout_height="40dp"
+                     android:layout_weight="1"
+                     android:text="10s"
+                     android:contentDescription="@string/desc_seek_back_10s"
+                     android:tag="10s"
+                     android:layout_margin="1dp"
+                     android:textSize="10sp" />
 
-                <Button
-                    android:id="@+id/btn20s"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="20s"
-                    android:tag="20s"
-                    android:layout_margin="1dp"
-                    android:textSize="10sp" />
+                 <Button
+                     android:id="@+id/btn20s"
+                     android:layout_width="0dp"
+                     android:layout_height="40dp"
+                     android:layout_weight="1"
+                     android:text="20s"
+                     android:contentDescription="@string/desc_seek_back_20s"
+                     android:tag="20s"
+                     android:layout_margin="1dp"
+                     android:textSize="10sp" />
 
-                <Button
-                    android:id="@+id/btn30s"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="30s"
-                    android:tag="30s"
-                    android:layout_margin="1dp" />
+                 <Button
+                     android:id="@+id/btn30s"
+                     android:layout_width="0dp"
+                     android:layout_height="40dp"
+                     android:layout_weight="1"
+                     android:text="30s"
+                     android:contentDescription="@string/desc_seek_back_30s"
+                     android:tag="30s"
+                     android:layout_margin="1dp" />
 
             </LinearLayout>
 
@@ -254,45 +266,49 @@
                 android:orientation="horizontal"
                 android:gravity="center">
 
-                <Button
-                    android:id="@+id/btn1m"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="1min"
-                    android:tag="1m"
-                    android:layout_margin="1dp"
-                    android:textSize="10sp" />
+                 <Button
+                     android:id="@+id/btn1m"
+                     android:layout_width="0dp"
+                     android:layout_height="40dp"
+                     android:layout_weight="1"
+                     android:text="1min"
+                     android:contentDescription="@string/desc_seek_back_1min"
+                     android:tag="1m"
+                     android:layout_margin="1dp"
+                     android:textSize="10sp" />
 
-                <Button
-                    android:id="@+id/btn2m"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="2min"
-                    android:tag="2m"
-                    android:layout_margin="1dp"
-                    android:textSize="10sp" />
+                 <Button
+                     android:id="@+id/btn2m"
+                     android:layout_width="0dp"
+                     android:layout_height="40dp"
+                     android:layout_weight="1"
+                     android:text="2min"
+                     android:contentDescription="@string/desc_seek_back_2min"
+                     android:tag="2m"
+                     android:layout_margin="1dp"
+                     android:textSize="10sp" />
 
-                <Button
-                    android:id="@+id/btn5m"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="5min"
-                    android:tag="5m"
-                    android:layout_margin="1dp"
-                    android:textSize="10sp" />
+                 <Button
+                     android:id="@+id/btn5m"
+                     android:layout_width="0dp"
+                     android:layout_height="40dp"
+                     android:layout_weight="1"
+                     android:text="5min"
+                     android:contentDescription="@string/desc_seek_back_5min"
+                     android:tag="5m"
+                     android:layout_margin="1dp"
+                     android:textSize="10sp" />
 
-                <Button
-                    android:id="@+id/btn10m"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="10min"
-                    android:tag="10m"
-                    android:layout_margin="1dp"
-                    android:textSize="10sp" />
+                 <Button
+                     android:id="@+id/btn10m"
+                     android:layout_width="0dp"
+                     android:layout_height="40dp"
+                     android:layout_weight="1"
+                     android:text="10min"
+                     android:contentDescription="@string/desc_seek_back_10min"
+                     android:tag="10m"
+                     android:layout_margin="1dp"
+                     android:textSize="10sp" />
 
             </LinearLayout>
 
@@ -302,35 +318,38 @@
                 android:orientation="horizontal"
                 android:gravity="center">
 
-                <Button
-                    android:id="@+id/btn30m"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="30min"
-                    android:tag="30m"
-                    android:layout_margin="1dp"
-                    android:textSize="10sp" />
+                 <Button
+                     android:id="@+id/btn30m"
+                     android:layout_width="0dp"
+                     android:layout_height="40dp"
+                     android:layout_weight="1"
+                     android:text="30min"
+                     android:contentDescription="@string/desc_seek_back_30min"
+                     android:tag="30m"
+                     android:layout_margin="1dp"
+                     android:textSize="10sp" />
 
-                <Button
-                    android:id="@+id/btn60m"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="60min"
-                    android:tag="60m"
-                    android:layout_margin="1dp"
-                    android:textSize="10sp" />
+                 <Button
+                     android:id="@+id/btn60m"
+                     android:layout_width="0dp"
+                     android:layout_height="40dp"
+                     android:layout_weight="1"
+                     android:text="60min"
+                     android:contentDescription="@string/desc_seek_back_60min"
+                     android:tag="60m"
+                     android:layout_margin="1dp"
+                     android:textSize="10sp" />
 
-                <Button
-                    android:id="@+id/btnBeginning"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1"
-                    android:text="@string/seek_beginning"
-                    android:backgroundTint="#2196F3"
-                    android:layout_margin="1dp"
-                    android:textSize="10sp" />
+                 <Button
+                     android:id="@+id/btnBeginning"
+                     android:layout_width="0dp"
+                     android:layout_height="40dp"
+                     android:layout_weight="1"
+                     android:text="@string/seek_beginning"
+                     android:contentDescription="@string/desc_seek_beginning"
+                     android:backgroundTint="#2196F3"
+                     android:layout_margin="1dp"
+                     android:textSize="10sp" />
 
             </LinearLayout>
 

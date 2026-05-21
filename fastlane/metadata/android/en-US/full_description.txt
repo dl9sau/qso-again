@@ -1,0 +1,9 @@
+QSO Again is an Android app for recording and playing back amateur radio QSOs (radio conversations).
+
+Features:
+- Record audio with microphone
+- Playback recordings
+- Manage recording files
+- Background recording with notification
+- **Audioloop**: Infinite audio recording in RAM (no intermediate storage on disk, size depends on available RAM)
+- **Quick rewind**: Jump back a few seconds via button or progress bar to listen to important passages again

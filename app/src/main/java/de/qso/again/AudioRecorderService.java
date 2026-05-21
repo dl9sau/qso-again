@@ -306,6 +306,7 @@ public class AudioRecorderService extends Service {
                 }
             }
         });
+        recordingThread.setPriority(Thread.MAX_PRIORITY);
         recordingThread.start();
     }
 

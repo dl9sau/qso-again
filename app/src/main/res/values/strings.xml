@@ -42,6 +42,8 @@
     <string name="language_system">System default</string>
     <string name="language_german">German</string>
     <string name="language_english">English</string>
+    <string name="language_french">French</string>
+    <string name="language_spanish">Spanish</string>
     <string name="copyright">Copyright</string>
     <string name="author">Author</string>
     <string name="license">License</string>
@@ -53,4 +55,24 @@
     <string name="auto_save">Auto-save when full (max duration or RAM)</string>
     <string name="audio_memory_consumption">Audio Memory consumption (RAM / File):\n%1$s</string>
     <string name="seek_beginning">Beginning</string>
+    <!-- Button content descriptions for accessibility -->
+    <string name="desc_start_stop_recording">Start or stop recording</string>
+    <string name="desc_play_recording">Play or stop playback</string>
+    <string name="desc_save_recording">Save current recording</string>
+    <string name="desc_decrease_playback_speed">Decrease playback speed</string>
+    <string name="desc_reset_playback_speed">Reset playback speed to default</string>
+    <string name="desc_increase_playback_speed">Increase playback speed</string>
+    <string name="desc_seek_back_0s">Seek back to end</string>
+    <string name="desc_seek_back_2s">Seek back 2 seconds</string>
+    <string name="desc_seek_back_5s">Seek back 5 seconds</string>
+    <string name="desc_seek_back_10s">Seek back 10 seconds</string>
+    <string name="desc_seek_back_20s">Seek back 20 seconds</string>
+    <string name="desc_seek_back_30s">Seek back 30 seconds</string>
+    <string name="desc_seek_back_1min">Seek back 1 minute</string>
+    <string name="desc_seek_back_2min">Seek back 2 minutes</string>
+    <string name="desc_seek_back_5min">Seek back 5 minutes</string>
+    <string name="desc_seek_back_10min">Seek back 10 minutes</string>
+    <string name="desc_seek_back_30min">Seek back 30 minutes</string>
+    <string name="desc_seek_back_60min">Seek back 60 minutes</string>
+    <string name="desc_seek_beginning">Seek to beginning</string>
 </resources>

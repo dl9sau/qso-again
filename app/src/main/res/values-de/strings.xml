@@ -51,4 +51,24 @@
     <string name="auto_save">Automatisch speichern bei Limit (Dauer oder RAM)</string>
     <string name="audio_memory_consumption">Audio Speicher-Verbrauch (RAM / Datei):\n%1$s</string>
     <string name="seek_beginning">Anfang</string>
+    <!-- Button content descriptions for accessibility -->
+    <string name="desc_start_stop_recording">Aufnahme starten oder stoppen</string>
+    <string name="desc_play_recording">Wiedergabe starten oder stoppen</string>
+    <string name="desc_save_recording">Aktuelle Aufnahme speichern</string>
+    <string name="desc_decrease_playback_speed">Wiedergabegeschwindigkeit verringern</string>
+    <string name="desc_reset_playback_speed">Wiedergabegeschwindigkeit zurücksetzen</string>
+    <string name="desc_increase_playback_speed">Wiedergabegeschwindigkeit erhöhen</string>
+    <string name="desc_seek_back_0s">Zum Ende zurückspulen</string>
+    <string name="desc_seek_back_2s">2 Sekunden zurückspulen</string>
+    <string name="desc_seek_back_5s">5 Sekunden zurückspulen</string>
+    <string name="desc_seek_back_10s">10 Sekunden zurückspulen</string>
+    <string name="desc_seek_back_20s">20 Sekunden zurückspulen</string>
+    <string name="desc_seek_back_30s">30 Sekunden zurückspulen</string>
+    <string name="desc_seek_back_1min">1 Minute zurückspulen</string>
+    <string name="desc_seek_back_2min">2 Minuten zurückspulen</string>
+    <string name="desc_seek_back_5min">5 Minuten zurückspulen</string>
+    <string name="desc_seek_back_10min">10 Minuten zurückspulen</string>
+    <string name="desc_seek_back_30min">30 Minuten zurückspulen</string>
+    <string name="desc_seek_back_60min">60 Minuten zurückspulen</string>
+    <string name="desc_seek_beginning">Zum Anfang springen</string>
 </resources>

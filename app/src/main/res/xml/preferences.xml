@@ -55,6 +55,6 @@
         <Preference
             android:key="created_with"
             android:title="@string/created_with"
-            android:summary="OpenCode (big-pickle)" />
+            android:summary="OpenCode (big-pickle / mistral)" />
     </PreferenceCategory>
 </PreferenceScreen>

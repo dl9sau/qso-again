@@ -10,16 +10,27 @@ if (versionPropsFile.canRead()) {
     versionBuild = (versionProps['VERSION_BUILD'] ?: '0').toInteger()
 }
 
+// Nur bei lokalen Builds erhöhen (nicht in CI/GitHub Actions)
+def isLocalBuild = !System.getenv('GITHUB_ACTIONS') && !System.getenv('CI')
 def isBuildingApp = gradle.startParameter.taskNames.any { name ->
     def n = name.toLowerCase()
     n.contains('assemble') || n.contains('install') || n.contains('bundle') || n == 'build'
 }
-if (isBuildingApp) {
+if (isBuildingApp && isLocalBuild) {
     versionBuild += 1
     Properties newVersionProps = new Properties()
     newVersionProps.setProperty('VERSION_BUILD', versionBuild.toString())
     versionPropsFile.withWriter { w -> newVersionProps.store(w, null) }
 }
+
+// Git-Hash für GitHub/F-Droid
+def gitHash = ''
+try {
+    gitHash = 'git rev-parse --short HEAD'.execute().text.trim()
+} catch (Exception e) {
+    gitHash = 'unknown'
+}
+def versionSuffix = isLocalBuild ? "" : "-GIT-${gitHash}"
 
 def buildTimestamp = new Date().format("yyyy-MM-dd HH:mm:ss")
 
@@ -32,7 +43,7 @@ android {
         minSdk 26
         targetSdk 34
         versionCode Math.max(1, versionBuild)
-        versionName "1.0.${versionBuild}"
+        versionName "1.0.${versionBuild}${versionSuffix}"
         buildConfigField "String", "BUILD_TIMESTAMP", "\"${buildTimestamp}\""
     }
 

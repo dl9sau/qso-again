@@ -1,0 +1,1 @@
+Record and playback amateur radio QSOs with Audioloop and quick rewind.

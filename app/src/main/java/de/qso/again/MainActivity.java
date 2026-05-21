@@ -11,6 +11,7 @@ import android.content.res.ColorStateList;
 import android.media.AudioFormat;
 import android.media.AudioTrack;
 import android.media.AudioAttributes;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
     private AudioRecorderService recorderService;
     private boolean serviceBound = false;
     private ExecutorService playbackExecutor = Executors.newSingleThreadExecutor();
+    private final ExecutorService ioExecutor = Executors.newFixedThreadPool(2);
     
     private TextView tvStatus, tvRecordingTime, tvPlaybackSpeed, tvPlaybackProgress;
     private ProgressBar progressRecording;
@@ -132,6 +134,12 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
         List<String> permissions = new ArrayList<>();
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             permissions.add(Manifest.permission.RECORD_AUDIO);
+        }
+        
+        // Für Android 10+ (API 29+): READ_EXTERNAL_STORAGE prüfen
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissions.add(Manifest.permission.READ_EXTERNAL_STORAGE);
         }
         
         if (!permissions.isEmpty()) {
@@ -614,7 +622,7 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
             return;
         }
         final AudioRecorderService.Snapshot finalSnap = snap;
-        new Thread(() -> {
+        ioExecutor.submit(() -> {
             try {
                 File downloadsDir = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS);
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd--HH:mm:ss", Locale.getDefault());
@@ -637,7 +645,7 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
             } finally {
                 if (recorderService != null) recorderService.releaseSnapshot(finalSnap);
             }
-        }).start();
+        });
     }
 
     @Override
@@ -657,7 +665,7 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
 
         final int finalOffset = saveOffset;
 
-        new Thread(() -> {
+        ioExecutor.submit(() -> {
             try {
                 byte[] recordingData = currentRecording;
                 long endTime = (recordingEndTime > 0) ? recordingEndTime : System.currentTimeMillis();
@@ -711,7 +719,7 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
                     Toast.makeText(this, "Error saving: " + msg, Toast.LENGTH_LONG).show();
                 });
             }
-        }).start();
+        });
     }
     
     private static void writeWavHeader(java.io.OutputStream out, int sampleRate, int bitsPerSample, int dataSize) throws java.io.IOException {
@@ -1117,6 +1125,7 @@ public class MainActivity extends AppCompatActivity implements AudioRecorderServ
         handler.removeCallbacks(playbackProgressRunnable);
         stopPlayback();
         playbackExecutor.shutdown();
+        ioExecutor.shutdown();
         
         if (serviceBound) {
             unbindService(serviceConnection);

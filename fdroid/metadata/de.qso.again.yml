@@ -1,0 +1,58 @@
+Categories:
+  - Audio
+  - Communication
+License: GPL-3.0-only
+AuthorName: Thomas Osterried, DL9SAU
+AuthorEmail: dl9sau@darc.de
+AuthorWebSite: https://github.com/dl9sau/qso-again
+SourceCode: https://github.com/dl9sau/qso-again
+IssueTracker: https://github.com/dl9sau/qso-again/issues
+Changelog: https://github.com/dl9sau/qso-again/releases
+
+AutoName: QSO Again
+Summary: Aufzeichnung von Amateurfunk-QSOs
+Description: |
+  QSO Again ist eine Android-App für Amateurfunk-Enthusiasten (Ham Radio) zum Aufzeichnen von Funkgesprächen (QSOs).
+  Die App läuft im Hintergrund und speichert Aufnahmen lokal auf dem Gerät.
+
+  Funktionen:
+  - Hintergrundaufnahme mit Mikrofon
+  - Speichern von Aufnahmen im app-spezifischen Storage
+  - Einstellungen für Audioqualität
+  - **Audioloop**: Unendliche Audioaufnahme im RAM (keine Zwischenspeicherung auf Festplatte, Größe hängt vom verfügbaren RAM ab)
+  - **Schneller Rücksprung**: Springe über einen Button oder das Progressbar ein paar Sekunden zurück, um wichtige Passagen erneut zu hören
+
+Permissions:
+  - name: android.permission.RECORD_AUDIO
+    description: Wird benötigt, um Amateurfunk-QSOs aufzunehmen.
+  - name: android.permission.WRITE_EXTERNAL_STORAGE
+    description: Wird benötigt, um Aufnahmen auf dem Gerät zu speichern (nur bis Android 28).
+  - name: android.permission.READ_EXTERNAL_STORAGE
+    description: Wird benötigt, um vorhandene Aufnahmen zu lesen.
+  - name: android.permission.FOREGROUND_SERVICE
+    description: Wird benötigt, um die Aufnahme im Hintergrund fortzusetzen.
+  - name: android.permission.FOREGROUND_SERVICE_MICROPHONE
+    description: Wird benötigt, um das Mikrofon im Hintergrund zu verwenden.
+
+RepoType: git
+Repo: https://github.com/dein-benutzername/qso-again.git
+
+Builds:
+  - versionName: 1.0.{{versionBuild}}-GIT-{{commit}}
+    versionCode: {{versionBuild}}
+    commit: HEAD
+    subdir: app
+    gradle:
+      - yes
+
+    srclibs:
+      - aar: androidx.appcompat:appcompat:1.6.1
+      - aar: androidx.preference:preference:1.2.1
+      - aar: com.google.android.material:material:1.11.0
+      - aar: androidx.constraintlayout:constraintlayout:2.1.4
+
+    ndk: none
+
+AutoUpdateMode: Version %v
+UpdateCheckData: |
+  json=https://github.com/dein-benutzername/qso-again/releases/latest|jq -r .tag_name
