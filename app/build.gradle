@@ -19,8 +19,14 @@ try {
     commitCount = ('git rev-list --count HEAD'.execute().text.trim()) as Integer
 } catch (Exception ignored) {}
 
+// Kurz-Hash fuer CI-Suffix
+def shortHash = ''
+try {
+    shortHash = 'git rev-parse --short HEAD'.execute().text.trim()
+} catch (Exception ignored) {}
+
 def isLocalBuild = !System.getenv('GITHUB_ACTIONS') && !System.getenv('CI')
-def versionSuffix = isLocalBuild ? '' : '-CI'
+def versionSuffix = isLocalBuild ? '' : "-GIT-${shortHash}"
 
 def buildTimestamp = new Date().format("yyyy-MM-dd HH:mm:ss")
 
