@@ -1,0 +1,14 @@
+QSO Again is an Android app for amateur radio (ham radio) enthusiasts to
+record radio conversations (QSOs). The app runs in the background and
+stores recordings locally on the device.
+
+Features:
+
+* Background recording via microphone
+* Save recordings to the Downloads folder
+* Audio quality settings (sample rate, bit depth)
+* Audio loop: continuous recording in RAM (no temporary disk storage;
+  size depends on available RAM)
+* Quick jump-back: use a button or the progress bar to jump back a few
+  seconds and replay important passages
+* Multilingual: German, English, Spanish, French

@@ -1,6 +1,6 @@
 Categories:
-  - Multimedia
   - Connectivity
+  - Multimedia
 License: GPL-3.0-only
 AuthorName: Thomas Osterried, DL9SAU
 AuthorEmail: dl9sau@darc.de
@@ -8,24 +8,6 @@ WebSite: https://github.com/dl9sau/qso-again
 SourceCode: https://github.com/dl9sau/qso-again
 IssueTracker: https://github.com/dl9sau/qso-again/issues
 Changelog: https://github.com/dl9sau/qso-again/releases
-
-AutoName: QSO Again
-Summary: Aufzeichnung von Amateurfunk-QSOs
-Description: |
-  QSO Again ist eine Android-App für Amateurfunk-Enthusiasten (Ham Radio) zum
-  Aufzeichnen von Funkgesprächen (QSOs). Die App läuft im Hintergrund und
-  speichert Aufnahmen lokal auf dem Gerät.
-
-  Funktionen:
-
-  * Hintergrundaufnahme mit Mikrofon
-  * Speichern von Aufnahmen im Downloads-Ordner
-  * Einstellungen für Audioqualität (Sample Rate, Bit-Tiefe)
-  * Audioloop: Unendliche Audioaufnahme im RAM (keine Zwischenspeicherung
-    auf Festplatte, Größe hängt vom verfügbaren RAM ab)
-  * Schneller Rücksprung: Springe über einen Button oder die Progressbar
-    ein paar Sekunden zurück, um wichtige Passagen erneut zu hören
-  * Mehrsprachig: Deutsch, Englisch, Spanisch, Französisch
 
 RepoType: git
 Repo: https://github.com/dl9sau/qso-again.git
@@ -38,7 +20,8 @@ Builds:
     gradle:
       - yes
 
-AutoUpdateMode: Version %v
+AutoUpdateMode: Version
 UpdateCheckMode: Tags
+UpdateCheckData: app/version.properties|versionCode=([0-9]+)|app/version.properties|versionName=([0-9.]+)
 CurrentVersion: 1.0.2
 CurrentVersionCode: 1000002
