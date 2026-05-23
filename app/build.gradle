@@ -2,38 +2,24 @@ plugins {
     id 'com.android.application'
 }
 
-// versionName: aus 'git describe --tags --always --dirty'
-//   auf Tag:        1.0.0
-//   zwischen Tags:  1.0.0-3-g3a1b   (3 Commits nach Tag, Kurzhash)
-//   ohne Tag:       3a1b            (nur Hash)
-//   uncommitted:    ...-dirty
-// CI/F-Droid-Builds bekommen Suffix '-CI' fuer klare Unterscheidung.
-def gitDescribe = '0.0.0-unknown'
-try {
-    gitDescribe = 'git describe --tags --always --dirty'.execute().text.trim()
-} catch (Exception ignored) {}
+// Versionierung: Single Source of Truth ist 'app/version.properties'.
+// Vorteil: shallow-clone-safe und gleiche Quelle fuer Gradle-Build und
+// F-Droid checkupdates (UpdateCheckData zeigt auf dasselbe File).
+def versionProps = new Properties()
+file('version.properties').withInputStream { versionProps.load(it) }
+def staticVersionName = versionProps.getProperty('versionName')
+def staticVersionCode = versionProps.getProperty('versionCode').toInteger()
 
-// versionCode: deterministisch aus Tag-Name (X.Y.Z -> X*1M + Y*1K + Z).
-// Vorteil: unabhaengig von Clone-Depth (F-Droid shallow-clone-safe) und
-// stimmt deterministisch mit dem YAML-versionCode ueberein.
-// Zwischen Tags greift der letzte erkannte Tag (gitDescribe-Prefix matcht
-// auch "1.0.1-3-gABC").
-def versionCodeFromTag = 1
-def tagMatch = gitDescribe =~ /^v?(\d+)\.(\d+)\.(\d+)/
-if (tagMatch) {
-    versionCodeFromTag = (tagMatch[0][1] as Integer) * 1000000 +
-                         (tagMatch[0][2] as Integer) * 1000 +
-                         (tagMatch[0][3] as Integer)
-}
-
-// Kurz-Hash fuer CI-Suffix
+// CI-Suffix '-GIT-<shortHash>': nur fuer GitHub-Actions-Builds zur klaren
+// Unterscheidung. F-Droid-Builds (CI=true, aber kein GITHUB_ACTIONS) bleiben
+// ohne Suffix, damit versionName mit dem YAML-Build-Eintrag uebereinstimmt.
 def shortHash = ''
 try {
     shortHash = 'git rev-parse --short HEAD'.execute().text.trim()
 } catch (Exception ignored) {}
 
-def isLocalBuild = !System.getenv('GITHUB_ACTIONS') && !System.getenv('CI')
-def versionSuffix = isLocalBuild ? '' : "-GIT-${shortHash}"
+def isGitHubActions = System.getenv('GITHUB_ACTIONS') != null
+def versionSuffix = isGitHubActions ? "-GIT-${shortHash}" : ''
 
 def buildTimestamp = new Date().format("yyyy-MM-dd HH:mm:ss")
 
@@ -45,8 +31,8 @@ android {
         applicationId "de.qso.again"
         minSdk 26
         targetSdk 34
-        versionCode versionCodeFromTag
-        versionName "${gitDescribe}${versionSuffix}"
+        versionCode staticVersionCode
+        versionName "${staticVersionName}${versionSuffix}"
         buildConfigField "String", "BUILD_TIMESTAMP", "\"${buildTimestamp}\""
     }
 
