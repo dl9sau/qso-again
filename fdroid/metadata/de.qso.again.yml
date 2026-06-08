@@ -16,7 +16,7 @@ Repo: https://github.com/dl9sau/qso-again.git
 Builds:
   - versionName: 1.0.2
     versionCode: 1000002
-    commit: 369f75fbb243a8c6d3ae31b351e98b79c98084a8
+    commit: 1a2266d5df8958b275c29b4c37c22e114361288b
     subdir: app
     gradle:
       - yes
@@ -25,3 +25,4 @@ AutoUpdateMode: Version
 UpdateCheckMode: Tags
 CurrentVersion: 1.0.2
 CurrentVersionCode: 1000002
+
