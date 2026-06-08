@@ -1,10 +1,9 @@
 Categories:
-  - Connectivity
   - Multimedia
+  - Connectivity
 License: GPL-3.0-only
 AuthorName: Thomas Osterried, DL9SAU
 AuthorEmail: dl9sau@darc.de
-WebSite: https://github.com/dl9sau/qso-again
 SourceCode: https://github.com/dl9sau/qso-again
 IssueTracker: https://github.com/dl9sau/qso-again/issues
 Changelog: https://github.com/dl9sau/qso-again/releases
